@@ -13,6 +13,9 @@ object AbnormalEnvironment : IDetector() {
         results.add(Pair("HMA (old version)", detectFile("/data/misc/hide_my_applist")))
         results.add(Pair("XPrivacyLua", detectFile("/data/system/xlua")))
         results.add(Pair("Thanox", detectFile("/data/system/thanos")))
+        results.add(Pair("Xposed Edge", detectFile("/data/system/xedge")))
+        results.add(Pair("Riru Clipboard", detectFile("/data/misc/clipboard")))
+        results.add(Pair("FuckLocation", detectFile("/data/system/fuck_location_test")))
     }
 
     private fun detectFile(path: String): Results {
