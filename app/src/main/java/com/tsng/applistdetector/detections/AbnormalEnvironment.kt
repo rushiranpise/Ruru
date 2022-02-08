@@ -17,6 +17,7 @@ object AbnormalEnvironment : IDetector() {
         results.add(Pair("Xposed Edge", detectFile("/data/system/xedge")))
         results.add(Pair("Riru Clipboard", detectFile("/data/misc/clipboard")))
         results.add(Pair("FuckLocation", detectFile("/data/system/fuck_location_test")))
+        results.add(Pair("MT", detectFile("/mnt/sdcard/MT2")))
     }
 
     private fun detectFile(path: String): Results {
