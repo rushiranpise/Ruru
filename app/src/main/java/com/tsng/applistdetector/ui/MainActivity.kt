@@ -24,6 +24,8 @@ import androidx.core.content.ContextCompat
 import com.google.android.gms.ads.MobileAds
 import com.tsng.applistdetector.BuildConfig
 import com.tsng.applistdetector.MyApplication
+import com.tsng.applistdetector.MyApplication.Companion.accList
+import com.tsng.applistdetector.MyApplication.Companion.accenable
 import com.tsng.applistdetector.MyApplication.Companion.detectionAppList
 import com.tsng.applistdetector.R
 import com.tsng.applistdetector.detections.*
@@ -54,21 +56,8 @@ class MainActivity : AppCompatActivity() {
         XposedModules,
         Accessibility
     )
-     fun checkDisabled(): String {
-        val serviceList = getFromAccessibilityManager() + getFromSettingsSecure()
-        return updateDisabled(serviceList)
-    }
-
-    @SuppressLint("SetTextI18n")
-    private fun updateDisabled(
-        serviceList: List<String>
-    ): String {
-        if (serviceList.isNotEmpty()) {
-            MyApplication.accContext = serviceList.toString()
-        } else {
-            MyApplication.accContext = "pass"
-        }
-        return MyApplication.accContext
+     fun checkDisabled() {
+         accList = getFromAccessibilityManager() + getFromSettingsSecure()
     }
 
     private fun getFromAccessibilityManager(): List<String> {
@@ -103,7 +92,7 @@ class MainActivity : AppCompatActivity() {
         }.toMutableList()
         val enabled = Settings.Secure.getInt(contentResolver, Settings.Secure.ACCESSIBILITY_ENABLED)
         if (enabled != 0) {
-            nameList.add("ACCESSIBILITY_ENABLED == $enabled")
+            accenable=true
         }
         return nameList
     }

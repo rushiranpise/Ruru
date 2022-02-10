@@ -15,6 +15,7 @@ object AbnormalEnvironment : IDetector() {
         results.add(Pair("Thanox", detectFile("/data/system/thanos")))
         results.add(Pair("TWRP", detectFile("/sdcard/TWRP")))
         results.add(Pair("Xposed Edge", detectFile("/data/system/xedge")))
+        results.add(Pair("Godmode", detectFile("/data/godmode")))
         results.add(Pair("Riru Clipboard", detectFile("/data/misc/clipboard")))
         results.add(Pair("FuckLocation", detectFile("/data/system/fuck_location_test")))
         results.add(Pair("MT", detectFile("/mnt/sdcard/MT2")))

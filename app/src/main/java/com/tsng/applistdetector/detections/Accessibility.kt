@@ -1,7 +1,8 @@
 package com.tsng.applistdetector.detections
 
 import android.provider.Settings
-import com.tsng.applistdetector.MyApplication.Companion.accContext
+import com.tsng.applistdetector.MyApplication.Companion.accList
+import com.tsng.applistdetector.MyApplication.Companion.accenable
 
 
 /**
@@ -12,12 +13,17 @@ import com.tsng.applistdetector.MyApplication.Companion.accContext
     override val name = "accessibility checker"
     override fun execute() {
         results.clear()
-        if (accContext!="pass") {
-            results.add(Pair(Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES, Results.FOUND))
-            results.add(Pair(accContext, Results.FOUND))
-        } else {
-            results.add(Pair(Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES, Results.NOT_FOUND))
-            results.add(Pair(Settings.Secure.ACCESSIBILITY_ENABLED, Results.NOT_FOUND))
+        if (accenable==true){
+            results.add(Pair("AccessibilitySERVICES.isEnabled", Results.FOUND))
+
+        }else{
+            results.add(Pair("AccessibilitySERVICES", Results.NOT_FOUND))
         }
+        if (accList.isNotEmpty()) {
+            accList.forEach { results.add(Pair(it, Results.FOUND)) }
+        } else {
+             results.add(Pair("AccessibilityList", Results.NOT_FOUND))
+        }
+
 }}
 
