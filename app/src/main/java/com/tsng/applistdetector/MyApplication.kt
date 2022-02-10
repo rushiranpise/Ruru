@@ -9,6 +9,7 @@ class MyApplication : Application() {
         @SuppressLint("StaticFieldLeak")
         lateinit var appContext: Context
         lateinit var detectionAppList: List<String>
+        lateinit var accContext: String
     }
 
     init {

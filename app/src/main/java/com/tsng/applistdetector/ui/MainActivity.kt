@@ -1,6 +1,10 @@
 package com.tsng.applistdetector.ui
 
+import android.accessibilityservice.AccessibilityServiceInfo
+import android.annotation.SuppressLint
 import android.os.Bundle
+import android.provider.Settings
+import android.view.accessibility.AccessibilityManager
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.animation.ExperimentalAnimationApi
@@ -16,8 +20,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat
 import com.google.android.gms.ads.MobileAds
 import com.tsng.applistdetector.BuildConfig
+import com.tsng.applistdetector.MyApplication
 import com.tsng.applistdetector.MyApplication.Companion.detectionAppList
 import com.tsng.applistdetector.R
 import com.tsng.applistdetector.detections.*
@@ -45,12 +51,66 @@ class MainActivity : AppCompatActivity() {
         FileDetections(useSyscall = false),
         FileDetections(useSyscall = true),
         RandomPackageName,
-        XposedModules
+        XposedModules,
+        Accessibility
     )
+     fun checkDisabled(): String {
+        val serviceList = getFromAccessibilityManager() + getFromSettingsSecure()
+        return updateDisabled(serviceList)
+    }
 
+    @SuppressLint("SetTextI18n")
+    private fun updateDisabled(
+        serviceList: List<String>
+    ): String {
+        if (serviceList.isNotEmpty()) {
+            MyApplication.accContext = serviceList.toString()
+        } else {
+            MyApplication.accContext = "pass"
+        }
+        return MyApplication.accContext
+    }
+
+    private fun getFromAccessibilityManager(): List<String> {
+        val accessibilityManager =
+            ContextCompat.getSystemService(this, AccessibilityManager::class.java)
+                ?: error("unreachable")
+        val serviceList: List<AccessibilityServiceInfo> =
+            accessibilityManager.getEnabledAccessibilityServiceList(AccessibilityServiceInfo.FEEDBACK_ALL_MASK)
+                ?: emptyList()
+        val nameList = serviceList.map {
+            packageManager.getApplicationLabel(it.resolveInfo.serviceInfo.applicationInfo)
+                .toString()
+        }.toMutableList()
+        if (accessibilityManager.isEnabled) {
+            nameList.add("AccessibilityManager.isEnabled")
+        }
+        if (accessibilityManager.isTouchExplorationEnabled) {
+            nameList.add("AccessibilityManager.isTouchExplorationEnabled")
+        }
+        return nameList
+    }
+
+    private fun getFromSettingsSecure(): List<String> {
+        val settingValue = Settings.Secure.getString(
+            contentResolver,
+            Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES
+        )
+        val nameList = if (settingValue.isEmpty()) {
+            emptyList()
+        } else {
+            settingValue.split(':')
+        }.toMutableList()
+        val enabled = Settings.Secure.getInt(contentResolver, Settings.Secure.ACCESSIBILITY_ENABLED)
+        if (enabled != 0) {
+            nameList.add("ACCESSIBILITY_ENABLED == $enabled")
+        }
+        return nameList
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         MobileAds.initialize(this)
+        checkDisabled()
         detectionAppList = getPreferences(MODE_PRIVATE).getStringSet("appList", null)?.toList() ?: IDetector.basicAppList
         setContent {
             AppTheme {
@@ -103,4 +163,5 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
 }
