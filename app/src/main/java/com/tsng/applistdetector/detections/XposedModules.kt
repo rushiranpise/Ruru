@@ -13,11 +13,10 @@ object XposedModules : IDetector() {
         val packages = mutableSetOf<String>()
 
         val pm = appContext.packageManager
-        val intent = Intent(Intent.ACTION_MAIN)
-        for (pkg in pm.queryIntentActivities(intent, PackageManager.GET_META_DATA)) {
-            val aInfo = pkg.activityInfo.applicationInfo
-            if (aInfo.metaData?.get("xposedmodule") != null)
-                packages.add(pm.getApplicationLabel(aInfo) as String)
+        val intent = pm.getInstalledApplications(PackageManager.GET_META_DATA)
+        for (pkg in intent) {
+            if (pkg.metaData?.get("xposedmodule") != null)
+                packages.add(pm.getApplicationLabel(pkg) as String)
         }
 
         packages.forEach { results.add(Pair(it, Results.FOUND)) }
