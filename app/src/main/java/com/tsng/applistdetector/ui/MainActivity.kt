@@ -1,7 +1,6 @@
 package com.tsng.applistdetector.ui
 
 import android.accessibilityservice.AccessibilityServiceInfo
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.provider.Settings
 import android.view.accessibility.AccessibilityManager
@@ -23,7 +22,6 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import com.google.android.gms.ads.MobileAds
 import com.tsng.applistdetector.BuildConfig
-import com.tsng.applistdetector.MyApplication
 import com.tsng.applistdetector.MyApplication.Companion.accList
 import com.tsng.applistdetector.MyApplication.Companion.accenable
 import com.tsng.applistdetector.MyApplication.Companion.detectionAppList
@@ -56,8 +54,8 @@ class MainActivity : AppCompatActivity() {
         XposedModules,
         Accessibility
     )
-     fun checkDisabled() {
-         accList = getFromAccessibilityManager() + getFromSettingsSecure()
+    private fun checkDisabled() {
+         accList = getFromAccessibilityManager()+getFromSettingsSecure()
     }
 
     private fun getFromAccessibilityManager(): List<String> {
@@ -80,14 +78,14 @@ class MainActivity : AppCompatActivity() {
         return nameList
     }
 
-    private fun getFromSettingsSecure(): List<String> {
-        val settingValue = Settings.Secure.getString(
+    private fun getFromSettingsSecure():List<String> {
+        val settingValue=Settings.Secure.getString(
             contentResolver,
             Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES
         )
-        val nameList = if (settingValue.isEmpty()) {
+        val nameList=if (settingValue.isNullOrEmpty()){
             emptyList()
-        } else {
+        }else{
             settingValue.split(':')
         }.toMutableList()
         val enabled = Settings.Secure.getInt(contentResolver, Settings.Secure.ACCESSIBILITY_ENABLED)
