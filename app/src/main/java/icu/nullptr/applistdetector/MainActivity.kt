@@ -6,6 +6,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
 import android.view.accessibility.AccessibilityManager
+import android.widget.Switch
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
@@ -29,8 +30,6 @@ import androidx.core.content.ContextCompat.startActivity
 import icu.nullptr.applistdetector.MyApplication.Companion.accList
 import icu.nullptr.applistdetector.MyApplication.Companion.accenable
 import icu.nullptr.applistdetector.MyApplication.Companion.appContext
-import icu.nullptr.applistdetector.MyApplication.Companion.checktext
-import icu.nullptr.applistdetector.MyApplication.Companion.titletext
 import icu.nullptr.applistdetector.theme.MyTheme
 
 class MainActivity : ComponentActivity() {
@@ -39,7 +38,6 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         checkDisabled()
-        init()
         setContent {
             MyTheme {
                 var showDialog by remember { mutableStateOf(false) }
@@ -57,15 +55,15 @@ class MainActivity : ComponentActivity() {
 @Composable
 private fun MainTopBar() {
     CenterAlignedTopAppBar(
-        title = { Text(init()[0]) }
+        title = { Text(stringResource(id = R.string.app_name) +"V${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})")}
     )
 }
 
 @Composable
 private fun MainFab(onClick: () -> Unit) {
     ExtendedFloatingActionButton(
-        icon = { Icon(Icons.Outlined.EmojiObjects, (init()[1]))},
-        text = { Text(init()[1]) },
+        icon = { Icon(Icons.Outlined.EmojiObjects, (stringResource(id = R.string.about)))},
+        text = { Text(stringResource(id = R.string.about)) },
         onClick = onClick
     )
 }
@@ -80,24 +78,24 @@ private fun AboutDialog(onDismiss: () -> Unit) {
                 Text(stringResource(android.R.string.ok))
             }
         },
-        title = { Text(init()[1]) },
+        title = { Text(stringResource(id = R.string.about)) },
         text = {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 CompositionLocalProvider(LocalTextStyle provides MaterialTheme.typography.bodyLarge) {
-                    Text(init()[0])
-                    Text(init()[2]+": Nullptr")
+                    Text(stringResource(id = R.string.app_name))
+                    Text(stringResource(id = R.string.authored)+": Nullptr")
                 }
                 Spacer(Modifier.height(10.dp))
                 val annotatedString = buildAnnotatedString {
                     pushStringAnnotation("GitHub", "https://github.com/Dr-TSNG/ApplistDetector")
                     withStyle(SpanStyle(color = MaterialTheme.colorScheme.primary)) {
-                        append(init()[3])
+                        append(appContext.getString(R.string.source))
                     }
                     pop()
                     append("    ")
                     pushStringAnnotation("Telegram", "https://t.me/HideMyApplist")
                     withStyle(SpanStyle(color = MaterialTheme.colorScheme.primary)) {
-                        append(init()[4])
+                        append(appContext.getString(R.string.telegram))
                     }
                     pop()
                 }
@@ -113,31 +111,54 @@ private fun AboutDialog(onDismiss: () -> Unit) {
         },
     )
 }
-fun init(): Array<String> {
-    var app_name:String=appContext.getString(R.string.app_name)+"V${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})"
-    var about:String=appContext.getString(R.string.about)
-    var authored:String=appContext.getString(R.string.authored)
-    var source:String=appContext.getString(R.string.source)
-    var telegram:String=appContext.getString(R.string.telegram)
-    var Stringlist= arrayOf(app_name,about,authored,source,telegram)
-
-    var not_found:String=appContext.getString(R.string.not_found)
-    var method:String=appContext.getString(R.string.method)
-    var suspicious:String=appContext.getString(R.string.suspicious)
-    var found:String=appContext.getString(R.string.found)
-    checktext= arrayListOf(not_found,method,suspicious,found)
-    var abnormal:String=appContext.getString(R.string.abnormal)
-    var filedet:String=appContext.getString(R.string.filedet)
-    var pmc:String=appContext.getString(R.string.pmc)
-    var pmca:String=appContext.getString(R.string.pmca)
-    var pmsa:String=appContext.getString(R.string.pmsa)
-    var pmiq:String=appContext.getString(R.string.pmiq)
-    var xposed:String=appContext.getString(R.string.xposed)
-    var magisk:String=appContext.getString(R.string.magisk)
-    var accessibility:String=appContext.getString(R.string.accessibility)
-    titletext= arrayListOf(abnormal,filedet,pmc,pmca,pmsa,pmiq,xposed,magisk,accessibility)
-    return Stringlist;
+fun gettext(string: String): String {
+    when(string){
+        "not_found" -> {
+            return appContext.getString(R.string.not_found)
+        }
+        "method" -> {
+            return appContext.getString(R.string.method)
+        }
+        "suspicious" -> {
+            return appContext.getString(R.string.suspicious)
+        }
+        "found" -> {
+            return appContext.getString(R.string.found)
+        }
+        "abnormal" -> {
+            return appContext.getString(R.string.abnormal)
+        }
+        "filedet" -> {
+            return appContext.getString(R.string.filedet)
+        }
+        "pmc" -> {
+            return appContext.getString(R.string.pmc)
+        }
+        "pmca" -> {
+            return appContext.getString(R.string.pmca)
+        }
+        "pmsa" -> {
+            return appContext.getString(R.string.pmsa)
+        }
+        "pmiq" -> {
+            return appContext.getString(R.string.pmiq)
+        }
+        "xposed" -> {
+            return appContext.getString(R.string.xposed)
+        }
+        "magisk" -> {
+            return appContext.getString(R.string.magisk)
+        }
+        "accessibility" -> {
+            return appContext.getString(R.string.accessibility)
+        }
+        else -> {
+            return "none"
+        }
+    }
 }
+
+
 private fun checkDisabled() {
     accList = getFromAccessibilityManager()+getFromSettingsSecure()
 }

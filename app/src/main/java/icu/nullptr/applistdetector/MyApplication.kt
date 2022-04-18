@@ -11,8 +11,6 @@ class MyApplication : Application() {
         lateinit var appContext: Context
         lateinit var accList: List<String>
         var accenable:Boolean = false
-        var checktext= arrayListOf<String>()
-        var titletext= arrayListOf<String>()
     }
 
     init {
