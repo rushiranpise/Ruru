@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Applist Detector</string>
+    <string name="app_name">Ruru</string>
     <string name="about">About</string>
     <string name="authored">Authored by</string>
     <string name="source">Source link</string>

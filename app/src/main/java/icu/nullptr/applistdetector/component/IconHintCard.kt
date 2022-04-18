@@ -17,9 +17,9 @@ import icu.nullptr.applistdetector.gettext
 val resultMap = mapOf(
     null to (Icons.Filled.HourglassEmpty to "Pending"),
     IDetector.Result.NOT_FOUND to (Icons.Filled.Done to gettext("not_found")),
-    IDetector.Result.METHOD_UNAVAILABLE to (Icons.Filled.CodeOff to gettext("not_found")),
-    IDetector.Result.SUSPICIOUS to (Icons.Filled.Visibility to gettext("not_found")),
-    IDetector.Result.FOUND to (Icons.Filled.Coronavirus to gettext("not_found"))
+    IDetector.Result.METHOD_UNAVAILABLE to (Icons.Filled.CodeOff to gettext("method")),
+    IDetector.Result.SUSPICIOUS to (Icons.Filled.Visibility to gettext("suspicious")),
+    IDetector.Result.FOUND to (Icons.Filled.Coronavirus to gettext("found"))
 )
 
 

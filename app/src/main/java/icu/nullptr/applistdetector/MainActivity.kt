@@ -6,7 +6,6 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
 import android.view.accessibility.AccessibilityManager
-import android.widget.Switch
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
@@ -55,7 +54,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 private fun MainTopBar() {
     CenterAlignedTopAppBar(
-        title = { Text(stringResource(id = R.string.app_name) +"V${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})")}
+        title = { Text(stringResource(id = R.string.app_name) +" V${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})")}
     )
 }
 
@@ -80,10 +79,9 @@ private fun AboutDialog(onDismiss: () -> Unit) {
         },
         title = { Text(stringResource(id = R.string.about)) },
         text = {
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Column(horizontalAlignment = Alignment.Start) {
                 CompositionLocalProvider(LocalTextStyle provides MaterialTheme.typography.bodyLarge) {
-                    Text(stringResource(id = R.string.app_name))
-                    Text(stringResource(id = R.string.authored)+": Nullptr")
+                    Text(stringResource(R.string.app_name)+"    "+stringResource(R.string.authored)+": Nullptr")
                 }
                 Spacer(Modifier.height(10.dp))
                 val annotatedString = buildAnnotatedString {

@@ -23,7 +23,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "icu.nullptr.applistdetector"
+        applicationId = "com.byxiaorun.detector"
         minSdk = minSdkVer
         targetSdk = targetSdkVer
         versionCode = verCode

@@ -18,7 +18,7 @@ class XposedModules(context: Context, override val name: String) : IDetector(con
         val set = if (detail == null) null else mutableSetOf<Pair<String, Result>>()
         val intent = pm.getInstalledApplications(PackageManager.GET_META_DATA)
         for (pkg in intent) {
-            if (pkg.metaData?.get("xposedmodule") != null){
+            if (pkg.metaData?.get("xposedminversion") != null){
                 val label = pm.getApplicationLabel(pkg) as String
                 result = Result.FOUND
                 set?.add(label to Result.FOUND)}
