@@ -1,9 +1,12 @@
-package icu.nullptr.applistdetector
+package com.byxiaorun.detector
 
 import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
 
+/**
+ *Created by byxiaorun on 2022/4/20/0020.
+ */
 class MyApplication : Application() {
 
     companion object {

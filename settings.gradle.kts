@@ -6,6 +6,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Applist Detector"
+rootProject.name = "Detector"
 include(":app")
 include(":library")

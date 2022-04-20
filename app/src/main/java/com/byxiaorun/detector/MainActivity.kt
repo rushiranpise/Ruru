@@ -1,4 +1,4 @@
-package icu.nullptr.applistdetector
+package com.byxiaorun.detector
 
 import android.accessibilityservice.AccessibilityServiceInfo
 import android.content.Intent
@@ -25,12 +25,14 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.startActivity
-import icu.nullptr.applistdetector.MyApplication.Companion.accList
-import icu.nullptr.applistdetector.MyApplication.Companion.accenable
-import icu.nullptr.applistdetector.MyApplication.Companion.appContext
+import com.byxiaorun.detector.BuildConfig
+import icu.nullptr.applistdetector.MainPage
 import icu.nullptr.applistdetector.theme.MyTheme
 
+
+/**
+ *Created by byxiaorun on 2022/4/20/0020.
+ */
 class MainActivity : ComponentActivity() {
 
     @OptIn(ExperimentalMaterial3Api::class)
@@ -54,14 +56,14 @@ class MainActivity : ComponentActivity() {
 @Composable
 private fun MainTopBar() {
     CenterAlignedTopAppBar(
-        title = { Text(stringResource(id = R.string.app_name) +" V${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})")}
+        title = { Text(stringResource(id = R.string.app_name) +" V${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})") }
     )
 }
 
 @Composable
 private fun MainFab(onClick: () -> Unit) {
     ExtendedFloatingActionButton(
-        icon = { Icon(Icons.Outlined.EmojiObjects, (stringResource(id = R.string.about)))},
+        icon = { Icon(Icons.Outlined.EmojiObjects, (stringResource(id = R.string.about))) },
         text = { Text(stringResource(id = R.string.about)) },
         onClick = onClick
     )
@@ -81,28 +83,29 @@ private fun AboutDialog(onDismiss: () -> Unit) {
         text = {
             Column(horizontalAlignment = Alignment.Start) {
                 CompositionLocalProvider(LocalTextStyle provides MaterialTheme.typography.bodyLarge) {
-                    Text(stringResource(R.string.app_name)+"    "+stringResource(R.string.authored)+": Nullptr")
+                    Text(stringResource(R.string.app_name) +" V${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})")
+                    Text(stringResource(R.string.authored) +": Nullptr")
                 }
                 Spacer(Modifier.height(10.dp))
                 val annotatedString = buildAnnotatedString {
                     pushStringAnnotation("GitHub", "https://github.com/Dr-TSNG/ApplistDetector")
                     withStyle(SpanStyle(color = MaterialTheme.colorScheme.primary)) {
-                        append(appContext.getString(R.string.source))
+                        append(MyApplication.appContext.getString(R.string.source))
                     }
                     pop()
                     append("    ")
                     pushStringAnnotation("Telegram", "https://t.me/HideMyApplist")
                     withStyle(SpanStyle(color = MaterialTheme.colorScheme.primary)) {
-                        append(appContext.getString(R.string.telegram))
+                        append(MyApplication.appContext.getString(R.string.telegram))
                     }
                     pop()
                 }
                 ClickableText(annotatedString, style = MaterialTheme.typography.bodyLarge) { offset ->
                     annotatedString.getStringAnnotations("GitHub", offset, offset).firstOrNull()?.let {
-                        startActivity(context, Intent(Intent.ACTION_VIEW, Uri.parse(it.item)), null)
+                        ContextCompat.startActivity(context, Intent(Intent.ACTION_VIEW, Uri.parse(it.item)), null)
                     }
                     annotatedString.getStringAnnotations("Telegram", offset, offset).firstOrNull()?.let {
-                        startActivity(context, Intent(Intent.ACTION_VIEW, Uri.parse(it.item)), null)
+                        ContextCompat.startActivity(context, Intent(Intent.ACTION_VIEW, Uri.parse(it.item)), null)
                     }
                 }
             }
@@ -112,43 +115,43 @@ private fun AboutDialog(onDismiss: () -> Unit) {
 fun gettext(string: String): String {
     when(string){
         "not_found" -> {
-            return appContext.getString(R.string.not_found)
+            return MyApplication.appContext.getString(R.string.not_found)
         }
         "method" -> {
-            return appContext.getString(R.string.method)
+            return MyApplication.appContext.getString(R.string.method)
         }
         "suspicious" -> {
-            return appContext.getString(R.string.suspicious)
+            return MyApplication.appContext.getString(R.string.suspicious)
         }
         "found" -> {
-            return appContext.getString(R.string.found)
+            return MyApplication.appContext.getString(R.string.found)
         }
         "abnormal" -> {
-            return appContext.getString(R.string.abnormal)
+            return MyApplication.appContext.getString(R.string.abnormal)
         }
         "filedet" -> {
-            return appContext.getString(R.string.filedet)
+            return MyApplication.appContext.getString(R.string.filedet)
         }
         "pmc" -> {
-            return appContext.getString(R.string.pmc)
+            return MyApplication.appContext.getString(R.string.pmc)
         }
         "pmca" -> {
-            return appContext.getString(R.string.pmca)
+            return MyApplication.appContext.getString(R.string.pmca)
         }
         "pmsa" -> {
-            return appContext.getString(R.string.pmsa)
+            return MyApplication.appContext.getString(R.string.pmsa)
         }
         "pmiq" -> {
-            return appContext.getString(R.string.pmiq)
+            return MyApplication.appContext.getString(R.string.pmiq)
         }
         "xposed" -> {
-            return appContext.getString(R.string.xposed)
+            return MyApplication.appContext.getString(R.string.xposed)
         }
         "magisk" -> {
-            return appContext.getString(R.string.magisk)
+            return MyApplication.appContext.getString(R.string.magisk)
         }
         "accessibility" -> {
-            return appContext.getString(R.string.accessibility)
+            return MyApplication.appContext.getString(R.string.accessibility)
         }
         else -> {
             return "none"
@@ -158,18 +161,18 @@ fun gettext(string: String): String {
 
 
 private fun checkDisabled() {
-    accList = getFromAccessibilityManager()+getFromSettingsSecure()
+    MyApplication.accList = getFromAccessibilityManager()+getFromSettingsSecure()
 }
 
 private fun getFromAccessibilityManager(): List<String> {
     val accessibilityManager =
-        ContextCompat.getSystemService(appContext, AccessibilityManager::class.java)
+        ContextCompat.getSystemService(MyApplication.appContext, AccessibilityManager::class.java)
             ?: error("unreachable")
     val serviceList: List<AccessibilityServiceInfo> =
         accessibilityManager.getEnabledAccessibilityServiceList(AccessibilityServiceInfo.FEEDBACK_ALL_MASK)
             ?: emptyList()
     val nameList = serviceList.map {
-        appContext.packageManager.getApplicationLabel(it.resolveInfo.serviceInfo.applicationInfo)
+        MyApplication.appContext.packageManager.getApplicationLabel(it.resolveInfo.serviceInfo.applicationInfo)
             .toString()
     }.toMutableList()
     if (accessibilityManager.isEnabled) {
@@ -183,7 +186,7 @@ private fun getFromAccessibilityManager(): List<String> {
 
 private fun getFromSettingsSecure():List<String> {
     val settingValue= Settings.Secure.getString(
-        appContext.contentResolver,
+        MyApplication.appContext.contentResolver,
         Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES
     )
     val nameList=if (settingValue.isNullOrEmpty()){
@@ -191,9 +194,9 @@ private fun getFromSettingsSecure():List<String> {
     }else{
         settingValue.split(':')
     }.toMutableList()
-    val enabled = Settings.Secure.getInt(appContext.contentResolver, Settings.Secure.ACCESSIBILITY_ENABLED)
+    val enabled = Settings.Secure.getInt(MyApplication.appContext.contentResolver, Settings.Secure.ACCESSIBILITY_ENABLED)
     if (enabled != 0) {
-        accenable=true
+        MyApplication.accenable =true
     }
     return nameList
 }

@@ -9,9 +9,10 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import icu.nullptr.applistdetector.MyApplication.Companion.accList
-import icu.nullptr.applistdetector.MyApplication.Companion.accenable
-import icu.nullptr.applistdetector.MyApplication.Companion.appContext
+import com.byxiaorun.detector.MyApplication.Companion.accList
+import com.byxiaorun.detector.MyApplication.Companion.accenable
+import com.byxiaorun.detector.MyApplication.Companion.appContext
+import com.byxiaorun.detector.gettext
 import icu.nullptr.applistdetector.component.CheckCard
 import icu.nullptr.applistdetector.component.IconHintCard
 import kotlinx.coroutines.*
@@ -34,8 +35,8 @@ val snapShotList = mutableStateListOf<Triple<IDetector, IDetector.Result?, Detai
 
     Triple(PMCommand(appContext,gettext("pmc")), null, null),
     Triple(PMConventionalAPIs(appContext,gettext("pmca")), null, null),
-    Triple(PMSundryAPIs(appContext,gettext("pmiq")), null, null),
-    Triple(PMQueryIntentActivities(appContext,gettext("filedet")), null, null),
+    Triple(PMSundryAPIs(appContext,gettext("pmsa")), null, null),
+    Triple(PMQueryIntentActivities(appContext,gettext("pmiq")), null, null),
 
     Triple(FileDetection(appContext, false,"Libc "+gettext("filedet")), null, null),
     Triple(FileDetection(appContext, true,"Syscall "+gettext("filedet")), null, null),
