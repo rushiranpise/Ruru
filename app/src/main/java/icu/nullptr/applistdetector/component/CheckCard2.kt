@@ -1,5 +1,9 @@
 package icu.nullptr.applistdetector.component
 
+/**
+ *Created by byxiaorun on 2022/5/13/0013.
+ */
+
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
@@ -25,7 +29,7 @@ import icu.nullptr.applistdetector.Detail
 import icu.nullptr.applistdetector.IDetector
 
 @Composable
-fun CheckCard(
+fun CheckCard2(
     title: String,
     result: IDetector.Result?,
     detail: Detail?
@@ -47,15 +51,12 @@ fun CheckCard(
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 val map = resultMap[result]!!
-                Text(text = title,
-                    style = MaterialTheme.typography.titleMedium,
-                    modifier = Modifier.weight(4f)
-                )
-                Icon(map.first, map.second,
-                    modifier = Modifier.weight(2f))
+                Icon(map.first, map.second)
+                Text(text = title, style = MaterialTheme.typography.titleMedium)
                 val rotateAngel by animateFloatAsState(if (expanded) 180f else 0f)
                 Icon(
                     imageVector = Icons.Filled.ArrowDropDown,
@@ -63,7 +64,6 @@ fun CheckCard(
                     modifier = Modifier
                         .rotate(rotateAngel)
                         .alpha(if (result == null) 0f else 1f)
-                        .weight(1f)
                 )
             }
 
@@ -72,15 +72,12 @@ fun CheckCard(
                     detail!!.forEachIndexed { index, item ->
                         val map = resultMap[item.second]!!
                         Row(verticalAlignment = Alignment.CenterVertically) {
-                            Text(text = item.first,
-                                style = MaterialTheme.typography.bodyMedium,
-                                modifier = Modifier.weight(4f))
-                            Icon(map.first, map.second,
-                                Modifier.size(16.dp).weight(2f))
-                            Spacer(Modifier.width(4.dp).weight(1f))
+                            Icon(map.first, map.second, Modifier.size(16.dp))
+                            Spacer(Modifier.width(4.dp))
+                            Text(text = item.first, style = MaterialTheme.typography.bodyMedium)
                         }
                         if (index != detail.size) {
-                            Spacer(Modifier.height(4.dp).weight(1f))
+                            Spacer(Modifier.height(4.dp))
                         }
                     }
                 }

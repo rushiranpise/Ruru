@@ -20,12 +20,12 @@ import kotlinx.coroutines.*
 val basicAppList = listOf(
     "com.topjohnwu.magisk",
     "io.github.vvb2060.magisk",
+    "io.github.vvb2060.magisk.lite",
     "de.robv.android.xposed.installer",
     "org.meowcat.edxposed.manager",
     "org.lsposed.manager",
     "top.canyie.dreamland.manager",
     "me.weishu.exp",
-    "com.android.vendinf",
     "moe.shizuku.redirectstorage"
 )
 
