@@ -40,9 +40,8 @@ val snapShotList = mutableStateListOf<Triple<IDetector, IDetector.Result?, Detai
 
     Triple(FileDetection(appContext, false,"Libc "+gettext("filedet")), null, null),
     Triple(FileDetection(appContext, true,"Syscall "+gettext("filedet")), null, null),
-
     Triple(XposedModules(appContext,gettext("xposed")), null, null),
-    Triple(MagiskRandomPackageName(appContext,gettext("magisk")), null, null),
+    Triple(MagiskApp(appContext,gettext("magisk")), null, null),
     Triple(Accessibility(appContext, accList = accList, accenable = accenable,gettext("accessibility")), null, null)
 )
 
@@ -55,7 +54,7 @@ suspend fun runDetector(id: Int, packages: Collection<String>?) {
 }
 
 @Composable
-fun MainPage() {
+fun MainPage(modifier: Modifier) {
     LaunchedEffect(appContext) {
         runDetector(0, null)
         runDetector(1, null)
@@ -66,7 +65,7 @@ fun MainPage() {
     }
 
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally

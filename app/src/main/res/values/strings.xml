@@ -16,6 +16,6 @@
     <string name="pmsa">PM Sundry APIs</string>
     <string name="pmiq">PM Intent Queries</string>
     <string name="xposed">Xposed Modules</string>
-    <string name="magisk">Random Package Name</string>
+    <string name="magisk">Magisk App</string>
     <string name="accessibility">Accessibility checker</string>
 </resources>
