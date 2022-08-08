@@ -48,7 +48,7 @@ android {
 }
 
 dependencies {
-    implementation("com.android.tools.build:apkzlib:7.2.1")
+    implementation("com.android.tools.build:apkzlib:7.2.2")
     implementation("dev.rikka.ndk.thirdparty:cxx:1.2.0")
     implementation("io.github.vvb2060.ndk:xposeddetector:2.2")
 }
