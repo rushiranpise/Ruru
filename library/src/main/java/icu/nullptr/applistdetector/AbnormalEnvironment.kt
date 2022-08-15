@@ -38,6 +38,7 @@ class AbnormalEnvironment(context: Context, private val subusybox: Boolean,
             add("TWRP" to detectFile("/storage/emulated/0/TWRP"))
             add(Pair("Xposed Edge", detectFile("/data/system/xedge")))
             add(Pair("Riru Clipboard", detectFile("/data/misc/clipboard")))
+            add(Pair("隐秘空间", detectFile("/data/system/cn.geektang.privacyspace")))
         }else{
         val places = arrayOf("/sbin/", "/system/bin/", "/system/xbin/", "/data/local/xbin/", "/data/local/bin/", "/system/sd/xbin/", "/system/bin/failsafe/", "/data/local/")
         for (where in places) {

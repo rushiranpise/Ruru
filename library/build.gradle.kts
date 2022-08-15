@@ -1,5 +1,6 @@
 val minSdkVer: Int by rootProject.extra
 val targetSdkVer: Int by rootProject.extra
+val compileSdkVer: Int by rootProject.extra
 val ndkVer: String by rootProject.extra
 val javaVer: JavaVersion by rootProject.extra
 
@@ -10,7 +11,8 @@ plugins {
 
 android {
     namespace = "icu.nullptr.applistdetector.library"
-    compileSdk = targetSdkVer
+    compileSdk = compileSdkVer
+    ndkVersion = ndkVer
 
     buildFeatures {
         prefab = true
@@ -49,6 +51,5 @@ android {
 
 dependencies {
     implementation("com.android.tools.build:apkzlib:7.2.2")
-    implementation("dev.rikka.ndk.thirdparty:cxx:1.2.0")
     implementation("io.github.vvb2060.ndk:xposeddetector:2.2")
 }

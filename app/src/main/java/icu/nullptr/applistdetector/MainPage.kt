@@ -26,6 +26,8 @@ val basicAppList = listOf(
     "org.lsposed.manager",
     "top.canyie.dreamland.manager",
     "me.weishu.exp",
+    "com.tsng.hidemyapplist",
+    "cn.geektang.privacyspace",
     "moe.shizuku.redirectstorage"
 )
 
