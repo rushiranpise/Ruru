@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Ruru</string>
+    <string name="about">關於</string>
+    <string name="authored">作者</string>
+    <string name="source">開源地址</string>
+    <string name="telegram">Telegram 群組</string>
+    <string name="not_found">未發現</string>
+    <string name="found">發現</string>
+    <string name="method">被拒絕</string>
+    <string name="suspicious">可疑</string>
+    <string name="abnormal">環境檢測</string>
+    <string name="filedet">檔案檢查</string>
+    <string name="pmc">PM 命令查詢</string>
+    <string name="pmca">PM 常規 API 查詢</string>
+    <string name="pmsa">PM 混合 API 查詢</string>
+    <string name="pmiq">PM 主介面查詢</string>
+    <string name="xposed">Xposed 模組</string>
+    <string name="lspatch">LSPatch 應用程式</string>
+    <string name="magisk">Magisk 應用程式</string>
+    <string name="accessibility">無障礙檢查</string>
+</resources>
