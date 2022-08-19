@@ -16,7 +16,7 @@
     <string name="pmsa">PM 混合 API 查詢</string>
     <string name="pmiq">PM 主介面查詢</string>
     <string name="xposed">Xposed 模組</string>
-    <string name="lspatch">LPStach 應用程式</string>
+    <string name="lspatch">LSPatch 應用程式</string>
     <string name="magisk">Magisk 應用程式</string>
     <string name="accessibility">無障礙檢查</string>
 </resources>
