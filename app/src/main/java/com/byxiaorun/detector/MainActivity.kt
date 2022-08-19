@@ -151,6 +151,9 @@ fun gettext(string: String): String {
         "xposed" -> {
             return MyApplication.appContext.getString(R.string.xposed)
         }
+        "lspatch" -> {
+            return MyApplication.appContext.getString(R.string.lspatch)
+        }
         "magisk" -> {
             return MyApplication.appContext.getString(R.string.magisk)
         }

@@ -34,17 +34,17 @@ val basicAppList = listOf(
 val snapShotList = mutableStateListOf<Triple<IDetector, IDetector.Result?, Detail?>>(
     Triple(AbnormalEnvironment(appContext,false, gettext("abnormal")), null, null),
     Triple(AbnormalEnvironment(appContext,true,"SuBusybox "+gettext("filedet")), null, null),
-
     Triple(PMCommand(appContext,gettext("pmc")), null, null),
     Triple(PMConventionalAPIs(appContext,gettext("pmca")), null, null),
     Triple(PMSundryAPIs(appContext,gettext("pmsa")), null, null),
     Triple(PMQueryIntentActivities(appContext,gettext("pmiq")), null, null),
-
     Triple(FileDetection(appContext, false,"Libc "+gettext("filedet")), null, null),
     Triple(FileDetection(appContext, true,"Syscall "+gettext("filedet")), null, null),
-    Triple(XposedModules(appContext,gettext("xposed")), null, null),
+//    Triple(StatFile(appContext," StatFile "+gettext("filedet")), null, null),
+    Triple(XposedModules(appContext,gettext("xposed"),false), null, null),
+    Triple(XposedModules(appContext,gettext("lspatch"),true), null, null),
     Triple(MagiskApp(appContext,gettext("magisk")), null, null),
-    Triple(Accessibility(appContext, accList = accList, accenable = accenable,gettext("accessibility")), null, null)
+    Triple(Accessibility(appContext, accList = accList, accenable = accenable,gettext("accessibility")), null, null),
 )
 
 suspend fun runDetector(id: Int, packages: Collection<String>?) {
@@ -61,9 +61,7 @@ fun MainPage(modifier: Modifier) {
         runDetector(0, null)
         runDetector(1, null)
         for (i in 2..7) runDetector(i, basicAppList)
-        runDetector(8, null)
-        runDetector(9, null)
-        runDetector(10, null)
+        for (i in 8..11) runDetector(i, null)
     }
 
     Column(

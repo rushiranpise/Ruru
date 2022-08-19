@@ -16,6 +16,7 @@
     <string name="pmsa">PM 混合API查询</string>
     <string name="pmiq">PM 主界面查询</string>
     <string name="xposed">Xposed 模块</string>
+    <string name="lspatch">Lpstach 软件</string>
     <string name="magisk">Magisk 软件</string>
     <string name="accessibility">无障碍检查</string>
 </resources>
