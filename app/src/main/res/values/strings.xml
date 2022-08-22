@@ -16,7 +16,7 @@
     <string name="pmsa">PM Sundry APIs</string>
     <string name="pmiq">PM Intent Queries</string>
     <string name="xposed">Xposed Modules</string>
-    <string name="lspatch">lspatch App</string>
+    <string name="lspatch">lSPatch App</string>
     <string name="magisk">Magisk App</string>
     <string name="accessibility">Accessibility checker</string>
 </resources>
