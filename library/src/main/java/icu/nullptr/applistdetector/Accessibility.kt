@@ -6,7 +6,7 @@ import android.content.Context
  *Created by byxiaorun on 2022/2/20/0020.
  */
 class Accessibility (context: Context, var accList: List<String>,
-                     var accenable:Boolean = false, override val name: String
+                     var accenable:Boolean, override val name: String
 ) : IDetector(context) {
     //override val name = "accessibility checker"
     override fun run(packages: Collection<String>?, detail: Detail?): Result {
@@ -16,13 +16,13 @@ class Accessibility (context: Context, var accList: List<String>,
             detail?.add(it)
         }
         if (accenable==true){
-            add(Pair("AccessibilitySERVICES.isEnabled", Result.FOUND))
+            add(Pair("AccessibilitySERVICES.isEnabled", Result.SUSPICIOUS))
 
         }else{
             add(Pair("AccessibilitySERVICES", Result.NOT_FOUND))
         }
         if (accList.isNotEmpty()) {
-            accList.forEach { add(Pair(it, Result.FOUND)) }
+            accList.forEach { add(Pair(it, Result.SUSPICIOUS)) }
         } else {
             add(Pair("AccessibilityList", Result.NOT_FOUND))
         }

@@ -14,6 +14,10 @@ class MyApplication : Application() {
         lateinit var appContext: Context
         lateinit var accList: List<String>
         var accenable:Boolean = false
+        var adbenable:Boolean = false
+        var development_enable:Boolean = false
+        var vpn_connect:Boolean = false
+
     }
 
     init {

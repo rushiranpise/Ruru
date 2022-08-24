@@ -18,5 +18,11 @@
     <string name="xposed">Xposed 模組</string>
     <string name="lspatch">LSPatch 應用程式</string>
     <string name="magisk">Magisk 應用程式</string>
-    <string name="accessibility">無障礙檢查</string>
+    <string name="accessibility">無障礙服務</string>
+    <string-array name="settingprops">
+        <item>設置屬性</item>
+        <item>已開啓開發者選項</item>
+        <item>已開啓usb調試</item>
+        <item>已鏈接vpn服務</item>
+    </string-array>
 </resources>

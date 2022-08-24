@@ -1,7 +1,9 @@
 package com.byxiaorun.detector
 
 import android.accessibilityservice.AccessibilityServiceInfo
+import android.content.Context.CONNECTIVITY_SERVICE
 import android.content.Intent
+import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
@@ -27,8 +29,12 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import com.byxiaorun.detector.BuildConfig
+import com.byxiaorun.detector.MyApplication.Companion.appContext
+import com.byxiaorun.detector.MyApplication.Companion.vpn_connect
 import icu.nullptr.applistdetector.MainPage
 import icu.nullptr.applistdetector.theme.MyTheme
+import java.net.NetworkInterface
+import java.util.*
 
 
 /**
@@ -40,6 +46,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         checkDisabled()
+        checkSetting()
         setContent {
             MyTheme {
                 var showDialog by remember { mutableStateOf(false) }
@@ -88,21 +95,26 @@ private fun AboutDialog(onDismiss: () -> Unit) {
             Column(horizontalAlignment = Alignment.Start) {
                 CompositionLocalProvider(LocalTextStyle provides MaterialTheme.typography.bodyLarge) {
                     Text(stringResource(R.string.app_name) +" V${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})")
-                    Text(stringResource(R.string.authored) +": Nullptr")
+                    Text(stringResource(R.string.authored) +": Nullptr & byxiaorun")
                 }
                 Spacer(Modifier.height(10.dp))
                 val annotatedString = buildAnnotatedString {
-                    pushStringAnnotation("GitHub", "https://github.com/Dr-TSNG/ApplistDetector")
+                    pushStringAnnotation("GitHub", "https://github.com/byxiaorun/ApplistDetector/tree/new")
                     withStyle(SpanStyle(color = MaterialTheme.colorScheme.primary)) {
-                        append(MyApplication.appContext.getString(R.string.source))
+                        append(appContext.getString(R.string.source))
                     }
                     pop()
-                    append("    ")
+                    append("  ")
                     pushStringAnnotation("Telegram", "https://t.me/HideMyApplist")
                     withStyle(SpanStyle(color = MaterialTheme.colorScheme.primary)) {
-                        append(MyApplication.appContext.getString(R.string.telegram))
+                        append(appContext.getString(R.string.telegram))
                     }
                     pop()
+                    append("  ")
+                    pushStringAnnotation("Telegram", "https://t.me/xrshop")
+                    withStyle(SpanStyle(color = MaterialTheme.colorScheme.primary)) {
+                        append(appContext.getString(R.string.telegram))
+                    }
                 }
                 ClickableText(annotatedString, style = MaterialTheme.typography.bodyLarge) { offset ->
                     annotatedString.getStringAnnotations("GitHub", offset, offset).firstOrNull()?.let {
@@ -116,52 +128,56 @@ private fun AboutDialog(onDismiss: () -> Unit) {
         },
     )
 }
-fun gettext(string: String): String {
+
+fun gettext(string: String): Array<String> {
     when(string){
         "not_found" -> {
-            return MyApplication.appContext.getString(R.string.not_found)
+            return arrayOf(appContext.getString(R.string.not_found))
         }
         "method" -> {
-            return MyApplication.appContext.getString(R.string.method)
+            return arrayOf(appContext.getString(R.string.method))
         }
         "suspicious" -> {
-            return MyApplication.appContext.getString(R.string.suspicious)
+            return arrayOf(appContext.getString(R.string.suspicious))
         }
         "found" -> {
-            return MyApplication.appContext.getString(R.string.found)
+            return arrayOf(appContext.getString(R.string.found))
         }
         "abnormal" -> {
-            return MyApplication.appContext.getString(R.string.abnormal)
+            return arrayOf(appContext.getString(R.string.abnormal))
         }
         "filedet" -> {
-            return MyApplication.appContext.getString(R.string.filedet)
+            return arrayOf(appContext.getString(R.string.filedet))
         }
         "pmc" -> {
-            return MyApplication.appContext.getString(R.string.pmc)
+            return arrayOf(appContext.getString(R.string.pmc))
         }
         "pmca" -> {
-            return MyApplication.appContext.getString(R.string.pmca)
+            return arrayOf(appContext.getString(R.string.pmca))
         }
         "pmsa" -> {
-            return MyApplication.appContext.getString(R.string.pmsa)
+            return arrayOf(appContext.getString(R.string.pmsa))
         }
         "pmiq" -> {
-            return MyApplication.appContext.getString(R.string.pmiq)
+            return arrayOf(appContext.getString(R.string.pmiq))
         }
         "xposed" -> {
-            return MyApplication.appContext.getString(R.string.xposed)
+            return arrayOf(appContext.getString(R.string.xposed))
         }
         "lspatch" -> {
-            return MyApplication.appContext.getString(R.string.lspatch)
+            return arrayOf(appContext.getString(R.string.lspatch))
         }
         "magisk" -> {
-            return MyApplication.appContext.getString(R.string.magisk)
+            return arrayOf(appContext.getString(R.string.magisk))
         }
         "accessibility" -> {
-            return MyApplication.appContext.getString(R.string.accessibility)
+            return arrayOf(appContext.getString(R.string.accessibility))
+        }
+        "settingprops" -> {
+            return appContext.resources.getStringArray(R.array.settingprops)
         }
         else -> {
-            return "none"
+            return arrayOf("none")
         }
     }
 }
@@ -173,13 +189,13 @@ private fun checkDisabled() {
 
 private fun getFromAccessibilityManager(): List<String> {
     val accessibilityManager =
-        ContextCompat.getSystemService(MyApplication.appContext, AccessibilityManager::class.java)
+        ContextCompat.getSystemService(appContext, AccessibilityManager::class.java)
             ?: error("unreachable")
     val serviceList: List<AccessibilityServiceInfo> =
         accessibilityManager.getEnabledAccessibilityServiceList(AccessibilityServiceInfo.FEEDBACK_ALL_MASK)
             ?: emptyList()
     val nameList = serviceList.map {
-        MyApplication.appContext.packageManager.getApplicationLabel(it.resolveInfo.serviceInfo.applicationInfo)
+        appContext.packageManager.getApplicationLabel(it.resolveInfo.serviceInfo.applicationInfo)
             .toString()
     }.toMutableList()
     if (accessibilityManager.isEnabled) {
@@ -193,7 +209,7 @@ private fun getFromAccessibilityManager(): List<String> {
 
 private fun getFromSettingsSecure():List<String> {
     val settingValue= Settings.Secure.getString(
-        MyApplication.appContext.contentResolver,
+        appContext.contentResolver,
         Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES
     )
     val nameList=if (settingValue.isNullOrEmpty()){
@@ -201,9 +217,37 @@ private fun getFromSettingsSecure():List<String> {
     }else{
         settingValue.split(':')
     }.toMutableList()
-    val enabled = Settings.Secure.getInt(MyApplication.appContext.contentResolver, Settings.Secure.ACCESSIBILITY_ENABLED)
+    val enabled = Settings.Secure.getInt(appContext.contentResolver, Settings.Secure.ACCESSIBILITY_ENABLED)
     if (enabled != 0) {
         MyApplication.accenable =true
     }
     return nameList
+}
+fun checkSetting() {
+    if((Settings.Secure.getInt(appContext.contentResolver,Settings.Global.DEVELOPMENT_SETTINGS_ENABLED,0)==1)){ MyApplication.development_enable=true }
+    if((Settings.Secure.getInt(appContext.contentResolver,Settings.Global.ADB_ENABLED,0)==1)){ MyApplication.adbenable=true }
+
+
+    try {
+        var nilist = NetworkInterface.getNetworkInterfaces()
+    if (nilist!=null){
+        for (obj in Collections.list(nilist)){
+            var intf:NetworkInterface=obj
+            if (!intf.isUp()||intf.interfaceAddresses.size==0) {
+                continue
+            }
+            if ("tun0".equals(intf.name) || "ppp0".equals(intf.name)){
+                vpn_connect=true
+            }
+            try {
+                val conMgr= appContext.getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager
+                if (conMgr.getNetworkInfo(17)?.isConnectedOrConnecting == true) vpn_connect=true
+
+            } catch (e: Exception) {
+            }
+        }
+    }
+    }catch (e:Throwable){
+        e.printStackTrace()
+    }
 }

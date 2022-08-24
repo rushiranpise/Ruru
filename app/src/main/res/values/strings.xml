@@ -16,7 +16,13 @@
     <string name="pmsa">PM Sundry APIs</string>
     <string name="pmiq">PM Intent Queries</string>
     <string name="xposed">Xposed Modules</string>
-    <string name="lspatch">lSPatch App</string>
+    <string name="lspatch">LSPatch App</string>
     <string name="magisk">Magisk App</string>
-    <string name="accessibility">Accessibility checker</string>
+    <string name="accessibility">Accessibility Services</string>
+     <string-array name="settingprops">
+        <item>Setting Props</item>
+        <item>Development mode is ENABLED</item>
+        <item>Debugging mode is enabled</item>
+        <item>Vpn Connected</item>
+    </string-array>
 </resources>
