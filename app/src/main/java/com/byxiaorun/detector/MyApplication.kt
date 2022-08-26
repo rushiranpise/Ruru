@@ -17,6 +17,7 @@ class MyApplication : Application() {
         var adbenable:Boolean = false
         var development_enable:Boolean = false
         var vpn_connect:Boolean = false
+        var maps_string:Boolean= false
 
     }
 

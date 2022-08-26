@@ -3,15 +3,14 @@ package icu.nullptr.applistdetector
 import android.content.Context
 class AbnormalEnvironment(
     context: Context, private val subusybox: Boolean,
-    override val name: String
+    override val name:String, val maps_string: Boolean
 ) : IDetector(context) {
 
-//    override val name = if (subusybox) "SuBusybox File Detection" else "Abnormal Environment"
 
     private external fun detectXposed(): Boolean
 
     private fun detectDual(): Result{
-        var filedir=context.filesDir.path
+        val filedir=context.filesDir.path
         return if(filedir.startsWith("/data/user")&& !filedir.startsWith("/data/user/0"))
             Result.SUSPICIOUS
         else Result.NOT_FOUND
@@ -39,6 +38,7 @@ class AbnormalEnvironment(
             add(Pair("Xposed Edge", detectFile("/data/system/xedge")))
             add(Pair("Riru Clipboard", detectFile("/data/misc/clipboard")))
             add(Pair("隐秘空间", detectFile("/data/system/cn.geektang.privacyspace")))
+            add(Pair("Magisk/Riru/Zygisk Maps Scan",if(maps_string)Result.FOUND else Result.NOT_FOUND))
         }else{
         val places = arrayOf("/sbin/", "/system/bin/", "/system/xbin/", "/data/local/xbin/", "/data/local/bin/", "/system/sd/xbin/", "/system/bin/failsafe/", "/data/local/")
         for (where in places) {

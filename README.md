@@ -8,11 +8,14 @@
 - [ ] 列出同步账户的所有用户
 ---
 
-###第三方开源引用
+### 第三方开源引用
 ##### Apache License 2.0
 [vvb2060/XposedDetector](https://github.com/vvb2060/XposedDetector)
+
 [Dr-TSNG/ApplistDetector](https://github.com/Dr-TSNG/ApplistDetector)
+
 [mahongyin/API-Security](https://github.com/mahongyin/API-Security)
+
 [lamster2018/EasyProtector](https://github.com/lamster2018/EasyProtector)
 ##### GNU General Public License v3.0
 [LSPosed/LSPatch](https://github.com/LSPosed/LSPatch)

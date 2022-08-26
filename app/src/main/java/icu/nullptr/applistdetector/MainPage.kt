@@ -14,6 +14,7 @@ import com.byxiaorun.detector.MyApplication.Companion.accenable
 import com.byxiaorun.detector.MyApplication.Companion.adbenable
 import com.byxiaorun.detector.MyApplication.Companion.appContext
 import com.byxiaorun.detector.MyApplication.Companion.development_enable
+import com.byxiaorun.detector.MyApplication.Companion.maps_string
 import com.byxiaorun.detector.MyApplication.Companion.vpn_connect
 import com.byxiaorun.detector.gettext
 import icu.nullptr.applistdetector.component.CheckCard
@@ -35,8 +36,8 @@ val basicAppList = listOf(
 )
 
 val snapShotList = mutableStateListOf<Triple<IDetector, IDetector.Result?, Detail?>>(
-    Triple(AbnormalEnvironment(appContext,false, gettext("abnormal")[0]), null, null),
-    Triple(AbnormalEnvironment(appContext,true, "SuBusybox "+gettext("filedet")[0]), null, null),
+    Triple(AbnormalEnvironment(appContext,false, gettext("abnormal")[0], maps_string), null, null),
+    Triple(AbnormalEnvironment(appContext,true, "SuBusybox "+gettext("filedet")[0],false), null, null),
     Triple(PMCommand(appContext,gettext("pmc")[0]), null, null),
     Triple(PMConventionalAPIs(appContext,gettext("pmca")[0]), null, null),
     Triple(PMSundryAPIs(appContext,gettext("pmsa")[0]), null, null),

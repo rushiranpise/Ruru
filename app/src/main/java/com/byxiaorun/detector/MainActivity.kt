@@ -30,11 +30,14 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import com.byxiaorun.detector.BuildConfig
 import com.byxiaorun.detector.MyApplication.Companion.appContext
+import com.byxiaorun.detector.MyApplication.Companion.maps_string
 import com.byxiaorun.detector.MyApplication.Companion.vpn_connect
 import icu.nullptr.applistdetector.MainPage
 import icu.nullptr.applistdetector.theme.MyTheme
+import java.io.*
 import java.net.NetworkInterface
 import java.util.*
+import kotlin.text.StringBuilder
 
 
 /**
@@ -47,6 +50,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         checkDisabled()
         checkSetting()
+        CheckProcSelfMaps()
         setContent {
             MyTheme {
                 var showDialog by remember { mutableStateOf(false) }
@@ -229,10 +233,10 @@ fun checkSetting() {
 
 
     try {
-        var nilist = NetworkInterface.getNetworkInterfaces()
+        val nilist = NetworkInterface.getNetworkInterfaces()
     if (nilist!=null){
         for (obj in Collections.list(nilist)){
-            var intf:NetworkInterface=obj
+            val intf:NetworkInterface=obj
             if (!intf.isUp()||intf.interfaceAddresses.size==0) {
                 continue
             }
@@ -248,6 +252,31 @@ fun checkSetting() {
         }
     }
     }catch (e:Throwable){
+        e.printStackTrace()
+    }
+}
+fun CheckProcSelfMaps() {
+    try {
+        val ret=StringBuilder()
+        val ins= FileInputStream("/proc/self/maps")
+        val reader=InputStreamReader(ins,Charsets.UTF_8)
+        val bufReader= BufferedReader(reader)
+
+        while (bufReader.readLine()!=null){
+            val line:String= bufReader.readLine()
+            val line2=line.split("\\/._-").toString()
+            if (line2.contains("magisk",ignoreCase = true)
+                ||(line2.contains("riru",ignoreCase = true)
+                ||(line2.contains("zygisk",ignoreCase = true)))
+            ){
+                ret.append(line2).append('\n')
+            }
+        }
+        bufReader.close()
+        reader.close()
+        ins.close()
+        if (ret.toString().trim().length!=0) maps_string=true
+    } catch (e: Exception) {
         e.printStackTrace()
     }
 }
