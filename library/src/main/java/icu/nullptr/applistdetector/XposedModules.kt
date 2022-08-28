@@ -17,10 +17,10 @@ class XposedModules(context: Context, override val name: String,private val lspa
         val pm = context.packageManager
         val set = if (detail == null) null else mutableSetOf<Pair<String, Result>>()
         val intent = pm.getInstalledApplications(PackageManager.GET_META_DATA)
-        var meta=""
-        if (lspatch) {meta="lspatch"}else{meta="xposedminversion"}
+        var meta="";var meta2=""
+        if (lspatch) {meta="lspatch";meta2="jshook"}else{meta="xposedminversion";meta2="xposeddescription"}
         for (pkg in intent) {
-            if (pkg.metaData?.get(meta) != null){
+            if (pkg.metaData?.get(meta) != null || pkg.metaData?.get(meta2)!=null){
                 val label = pm.getApplicationLabel(pkg) as String
                 result = Result.FOUND
                 set?.add(label to Result.FOUND)}
@@ -31,14 +31,15 @@ class XposedModules(context: Context, override val name: String,private val lspa
                 val ainfo=pkg.activityInfo.applicationInfo
                 if (lspatch){
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                        if (ainfo.appComponentFactory?.equals("org.lsposed.lspatch.appstub.LSPAppComponentFactoryStub") == true){
+                        if (ainfo.appComponentFactory?.contains("lsposed") == true
+                        ){
                             val label = pm.getApplicationLabel(ainfo) as String
                             result = Result.FOUND
-                            set?.add(label to Result.FOUND)
+                            set?.add(label+"(Api28)" to Result.FOUND)
                         }
                     }
                 }
-                if (ainfo.metaData?.get(meta) != null) {
+                if (ainfo.metaData?.get(meta) != null || ainfo.metaData?.get(meta2)!=null) {
                     val label = pm.getApplicationLabel(ainfo) as String
                     result = Result.FOUND
                     set?.add(label to Result.FOUND)

@@ -227,10 +227,37 @@ private fun getFromSettingsSecure():List<String> {
     }
     return nameList
 }
+
+fun  getValueFromProp(propName:String): String {
+        val line:String
+        var input: BufferedReader? =null
+        try {
+            val p:Process=Runtime.getRuntime().exec("getprop "+propName)
+            input =BufferedReader( InputStreamReader(p.getInputStream()), 1024)
+            line = input.readLine()
+            input.close()
+        } catch (ex:IOException) {
+            return null.toString()
+        } finally {
+            if (input != null) {
+                try {
+                    input.close()
+                } catch (e:IOException) {
+                    e.printStackTrace()
+                }
+            }
+        }
+        return line
+    }
+
 fun checkSetting() {
     if((Settings.Secure.getInt(appContext.contentResolver,Settings.Global.DEVELOPMENT_SETTINGS_ENABLED,0)==1)){ MyApplication.development_enable=true }
-    if((Settings.Secure.getInt(appContext.contentResolver,Settings.Global.ADB_ENABLED,0)==1)){ MyApplication.adbenable=true }
-
+    if((Settings.Secure.getInt(appContext.contentResolver,Settings.Global.ADB_ENABLED,0)==1
+                || getValueFromProp("sys.usb.ffs.ready").contains("1")
+                || getValueFromProp("sys.usb.state").contains("adb")
+                || getValueFromProp("sys.usb.config").contains("adb")
+                || getValueFromProp("persist.sys.usb.reboot.funnc").contains("adb")
+                )){ MyApplication.adbenable=true }
 
     try {
         val nilist = NetworkInterface.getNetworkInterfaces()
@@ -257,6 +284,7 @@ fun checkSetting() {
 }
 fun CheckProcSelfMaps() {
     try {
+
         val ret=StringBuilder()
         val ins= FileInputStream("/proc/self/maps")
         val reader=InputStreamReader(ins,Charsets.UTF_8)

@@ -2,8 +2,7 @@ package icu.nullptr.applistdetector
 
 import android.content.Context
 class AbnormalEnvironment(
-    context: Context, private val subusybox: Boolean,
-    override val name:String, val maps_string: Boolean
+    context: Context, override val name:String, val maps_string: Boolean
 ) : IDetector(context) {
 
 
@@ -29,7 +28,6 @@ class AbnormalEnvironment(
             result = result.coerceAtLeast(it.second)
             detail?.add(it)
         }
-        if (!subusybox){
             add("Xposed hooks" to if (detectXposed()) Result.FOUND else Result.NOT_FOUND)
             add("Dual / Work profile" to detectDual())
             add(Pair("HMA (old version)", detectFile("/data/misc/hide_my_applist")))
@@ -39,16 +37,27 @@ class AbnormalEnvironment(
             add(Pair("Riru Clipboard", detectFile("/data/misc/clipboard")))
             add(Pair("隐秘空间", detectFile("/data/system/cn.geektang.privacyspace")))
             add(Pair("Magisk/Riru/Zygisk Maps Scan",if(maps_string)Result.FOUND else Result.NOT_FOUND))
-        }else{
-        val places = arrayOf("/sbin/", "/system/bin/", "/system/xbin/", "/data/local/xbin/", "/data/local/bin/", "/system/sd/xbin/", "/system/bin/failsafe/", "/data/local/")
+        var sufilenum=0
+        var busyboxnum=0
+        var magisknum=0
+        val places = arrayOf("/sbin/", "/system/bin/", "/system/xbin/","/proc/self/root/bin/", "/data/local/xbin/", "/data/local/bin/", "/system/sd/xbin/", "/system/bin/failsafe/", "/data/local/","/cache")
         for (where in places) {
             val sufile=where+"su"
             val busyboxfile=where+"busybox"
-            add("SuFile("+sufile+")" to detectFile(sufile))
-            add("BusyboxFile("+busyboxfile+")" to detectFile(busyboxfile))
+            val magiskfile=where+"magisk"
+            if(detectFile(sufile)!=Result.NOT_FOUND){
+                sufilenum+=1
+            }
+            if(detectFile(busyboxfile)!=Result.NOT_FOUND){
+                busyboxnum+=1
+            }
+            if(detectFile(magiskfile)!=Result.NOT_FOUND){
+                magisknum+=1
+            }
         }
-
-        }
+        add(Pair("Su File",if(sufilenum!=0)Result.FOUND else Result.NOT_FOUND))
+        add(Pair("Busybox File",if(busyboxnum!=0)Result.FOUND else Result.NOT_FOUND))
+        add(Pair("Magisk File",if(magisknum!=0)Result.FOUND else Result.NOT_FOUND))
         return result
 }}
 

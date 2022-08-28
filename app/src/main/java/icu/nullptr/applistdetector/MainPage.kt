@@ -36,8 +36,7 @@ val basicAppList = listOf(
 )
 
 val snapShotList = mutableStateListOf<Triple<IDetector, IDetector.Result?, Detail?>>(
-    Triple(AbnormalEnvironment(appContext,false, gettext("abnormal")[0], maps_string), null, null),
-    Triple(AbnormalEnvironment(appContext,true, "SuBusybox "+gettext("filedet")[0],false), null, null),
+    Triple(AbnormalEnvironment(appContext, gettext("abnormal")[0], maps_string), null, null),
     Triple(PMCommand(appContext,gettext("pmc")[0]), null, null),
     Triple(PMConventionalAPIs(appContext,gettext("pmca")[0]), null, null),
     Triple(PMSundryAPIs(appContext,gettext("pmsa")[0]), null, null),
@@ -64,9 +63,8 @@ suspend fun runDetector(id: Int, packages: Collection<String>?) {
 fun MainPage(modifier: Modifier) {
     LaunchedEffect(appContext) {
         runDetector(0, null)
-        runDetector(1, null)
-        for (i in 2..7) runDetector(i, basicAppList)
-        for (i in 8..12) runDetector(i, null)
+        for (i in 1..6) runDetector(i, basicAppList)
+        for (i in 7..11) runDetector(i, null)
     }
 
     Column(
