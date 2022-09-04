@@ -28,15 +28,17 @@ class AbnormalEnvironment(
             result = result.coerceAtLeast(it.second)
             detail?.add(it)
         }
-            add("Xposed hooks" to if (detectXposed()) Result.FOUND else Result.NOT_FOUND)
-            add("Dual / Work profile" to detectDual())
-            add(Pair("HMA (old version)", detectFile("/data/misc/hide_my_applist")))
-            add("XPrivacyLua" to detectFile("/data/system/xlua"))
-            add("TWRP" to detectFile("/storage/emulated/0/TWRP"))
-            add(Pair("Xposed Edge", detectFile("/data/system/xedge")))
-            add(Pair("Riru Clipboard", detectFile("/data/misc/clipboard")))
-            add(Pair("隐秘空间", detectFile("/data/system/cn.geektang.privacyspace")))
-            add(Pair("Magisk/Riru/Zygisk Maps Scan",if(maps_string)Result.FOUND else Result.NOT_FOUND))
+        add("Xposed hooks" to if (detectXposed()) Result.FOUND else Result.NOT_FOUND)
+        add("Dual / Work profile" to detectDual())
+        add(Pair("HMA (old version)", detectFile("/data/misc/hide_my_applist")))
+        add("XPrivacyLua" to detectFile("/data/system/xlua"))
+        add("TWRP" to if(detectFile("/storage/emulated/0/TWRP")!=Result.NOT_FOUND
+            || detectFile("/storage/emulated/TWRP")!=Result.NOT_FOUND)
+            Result.SUSPICIOUS else Result.NOT_FOUND )
+        add(Pair("Xposed Edge", detectFile("/data/system/xedge")))
+        add(Pair("Riru Clipboard", detectFile("/data/misc/clipboard")))
+        add(Pair("隐秘空间", detectFile("/data/system/cn.geektang.privacyspace")))
+        add(Pair("Magisk/Riru/Zygisk Maps Scan",if(maps_string)Result.FOUND else Result.NOT_FOUND))
         var sufilenum=0
         var busyboxnum=0
         var magisknum=0

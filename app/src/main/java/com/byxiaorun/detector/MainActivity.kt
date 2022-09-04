@@ -37,6 +37,7 @@ import icu.nullptr.applistdetector.theme.MyTheme
 import java.io.*
 import java.net.NetworkInterface
 import java.util.*
+import kotlin.collections.ArrayList
 import kotlin.text.StringBuilder
 
 
@@ -272,7 +273,8 @@ fun checkSetting() {
             }
             try {
                 val conMgr= appContext.getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager
-                if (conMgr.getNetworkInfo(17)?.isConnectedOrConnecting == true) vpn_connect=true
+                if (conMgr.getNetworkInfo(17)?.isConnectedOrConnecting == true
+                    || conMgr.getNetworkInfo(17)?.isConnectedOrConnecting ==null) vpn_connect=true
 
             } catch (e: Exception) {
             }
@@ -284,26 +286,31 @@ fun checkSetting() {
 }
 fun CheckProcSelfMaps() {
     try {
-
         val ret=StringBuilder()
-        val ins= FileInputStream("/proc/self/maps")
-        val reader=InputStreamReader(ins,Charsets.UTF_8)
-        val bufReader= BufferedReader(reader)
-
-        while (bufReader.readLine()!=null){
-            val line:String= bufReader.readLine()
-            val line2=line.split("\\/._-").toString()
-            if (line2.contains("magisk",ignoreCase = true)
-                ||(line2.contains("riru",ignoreCase = true)
-                ||(line2.contains("zygisk",ignoreCase = true)))
-            ){
-                ret.append(line2).append('\n')
+        val ins=FileInputStream("/proc/self/smaps")
+        var ins2= FileInputStream("/proc/self/maps")
+        val list= ArrayList<InputStream>()
+        list.add(ins)
+        list.add(ins2)
+        for (inputlist in list){
+            val reader=InputStreamReader(inputlist,Charsets.UTF_8)
+            val bufReader= BufferedReader(reader)
+            while (bufReader.readLine()!=null){
+                val line:String= bufReader.readLine()
+                val line2=line.split("/","_","-").toString()
+                if (line2.contains(".magisk",ignoreCase = true)
+                    ||(line2.contains("riru",ignoreCase = true)
+                            ||(line2.contains("zygisk",ignoreCase = true)))
+                ){
+                    ret.append(line2).append('\n')
+                }
             }
+            if (ret.toString().length!=0) maps_string=true
+            bufReader.close()
+            reader.close()
         }
-        bufReader.close()
-        reader.close()
         ins.close()
-        if (ret.toString().trim().length!=0) maps_string=true
+        ins2.close()
     } catch (e: Exception) {
         e.printStackTrace()
     }
